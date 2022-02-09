@@ -71,13 +71,21 @@ public:
 	 */
 	void setGoalPositionAndVelocity(const Eigen::VectorXd goal_position, const Eigen::VectorXd goal_velocity);
 
-	/**
-	 * @brief      Calculates the next desired position and velocity for the next step
+  /**
+	 * @brief      Function to know if path from positionA to positionB is collision free
+   *
+   * @param[in]  position_a   Starting position
+   * @param[in]  position_b   Ending position
 	 *
-	 * @param      next_position  The desired position in the next step
-	 * @param      next_velocity  The desired velocity in the next step
+	 * @return     true if the path is collision free, false otherwise
 	 */
-	void computeNextState(Eigen::VectorXd& next_position, Eigen::VectorXd& next_velocity, Eigen::VectorXd& next_acceleration);
+  bool isFreeMotion(const Eigen::VectorXd position_a, const Eigen::VectorXd position_b);
+
+	/**
+	 * @brief      Uses RRT to calculate a trajectory
+	 *
+	 */
+	void generateTrajectory();
 
 	/**
 	 * @brief      Function to know if the goal position and velocity is reached
@@ -90,6 +98,18 @@ public:
    * Member variables
    */
   bool _goal_reached = false;
+  Eigen::VectorXd& _initial_position = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd& _goal_position = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd& _goal_velocity = Eigen::VectorXd::Zero(3);
+
+  Eigen::VectorXd _max_velocity = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd _max_acceleration = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd _max_jerk = Eigen::VectorXd::Zero(3);
+
+  Eigen::VectorXd _current_position = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd _current_velocity = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd _current_acceleration = Eigen::VectorXd::Zero(3);
+  Eigen::VectorXd _current_jerk = Eigen::VectorXd::Zero(3);
 
 };
 
