@@ -15,7 +15,7 @@ public:
    * @param[in]  height     Height of occupancy grid (y dimension)
    * @param[in]  obstacles  List of obstacles for this robot to keep track of
 	 */
-	OccupancyGrid(const uint32_t width, const uint32_t height, list<Obstacle>& obstacles);
+	OccupancyGrid(const uint32_t width, const uint32_t height, list<Obstacle>& obstacles, const float resolution);
 
   /**
 	 * @brief      destructor
@@ -38,6 +38,7 @@ public:
   uint32_t _width = 0;
   uint32_t _height = 0;
   list<Obstacle>* _obstacles = NULL;
+  float _resolution = 0;
 
 }
 

@@ -14,7 +14,8 @@ include(GNUInstallDirs)
 
 set(SOURCE_FILES src/MobilePlanner.cpp src/OccupancyGrid.cpp src/Obstacle.cpp)
 
-add_library(${PROJECT_NAME} ...)
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})  # adding namespace
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -31,6 +32,5 @@ install(TARGETS ${PROJECT_NAME} EXPORT Sai2PlanningConfig
     RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
 
-install(EXPORT Sai2PlanningConfig DESTINATION share/Sai2Planning/cmake)
-
-export(TARGETS ${PROJECT_NAME} FILE Sai2PlanningConfig.cmake)
+install(EXPORT Sai2PlanningConfig DESTINATION share/Sai2Planning/cmake NAMESPACE ${PROJECT_NAME}::)
+export(TARGETS ${PROJECT_NAME} FILE Sai2PlanningConfig.cmake NAMESPACE ${PROJECT_NAME}::)

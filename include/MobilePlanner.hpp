@@ -1,6 +1,7 @@
 // 2D Path Planner for Mobile Base Robots
 
 #include <iostream>
+#include <Eigen/Dense>
 
 namespace Sai2Planning
 {
@@ -13,8 +14,9 @@ public:
 	 *
 	 * @param[in]  initial_position   Initial position of the robot in 2d
    * @param[in]  goal_position      Goal position of the robot in 2d
+   * @param[in]  occupancy          OccupancyGrid for this planner
 	 */
-	MobilePlanner(const Eigen::VectorXd& initial_position, const Eigen::VectorXd& goal_position);
+	MobilePlanner(const Eigen::VectorXd& initial_position, const Eigen::VectorXd& goal_position, OccupancyGrid& occupancy);
 
   /**
 	 * @brief      destructor
@@ -110,6 +112,8 @@ public:
   Eigen::VectorXd _current_velocity = Eigen::VectorXd::Zero(3);
   Eigen::VectorXd _current_acceleration = Eigen::VectorXd::Zero(3);
   Eigen::VectorXd _current_jerk = Eigen::VectorXd::Zero(3);
+
+  OccupancyGrid* _occupancy = NULL;
 
 };
 

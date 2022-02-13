@@ -5,11 +5,12 @@
 
 namespace Sai2Planning
 {
-  OccupancyGrid::OccupancyGrid(const uint32_t width, const uint32_t height, list<Obstacle>& obstacles)
+  OccupancyGrid::OccupancyGrid(const uint32_t width, const uint32_t height, list<Obstacle>& obstacles, const float resolution)
   {
     _width = width;
     _height = height;
     _obstacles = obstacles;
+    _resolution = resolution;
   }
 
   OccupancyGrid::~OccupancyGrid() {}

@@ -29,4 +29,4 @@ public:
   double _topLeftY = 0.0;
   double _bottomRightX = 0.0;
   double _bottomRightY = 0.0;
-}
+};
