@@ -12,7 +12,7 @@ endif()
 
 include(GNUInstallDirs)
 
-set(SOURCE_FILES src/MobilePlanner.cpp)
+set(SOURCE_FILES src/MobilePlanner.cpp src/OccupancyGrid.cpp src/Obstacle.cpp)
 
 add_library(${PROJECT_NAME} ...)
 
