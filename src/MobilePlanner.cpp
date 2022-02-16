@@ -54,7 +54,7 @@ bool MobilePlanner::isFreeMotion(const Eigen::VectorXd position_a, const Eigen::
 {
   // Use obstacle representation to identify whether the path from a to b requires going through an obstacle
   // Use occupancy grids for this high level trajectory - only for the later part do you have to worry about moving obstacles
-  float distance = sqrt(pow(position_b[0]-position_a[0], 2) + pow(position_b[1]-position_a[1], 2));
+  float distance = (position_a - position_b).norm();
   uint32_t num_points = (uint32_t) (distance / _occupancy->_resolution);
   float x_step = abs(position_b[0]-position_a[0]) / num_points;
   float slope = (position_b[1]-position_a[1]) / (position_b[0]-position_a[0]);
@@ -69,14 +69,30 @@ bool MobilePlanner::isFreeMotion(const Eigen::VectorXd position_a, const Eigen::
   return true;
 }
 
-int MobilePlanner::findNearest(std::list<Eigen::VectorXd>& candidateStates, const Eigen::VectorXd queryState)
+uint32_t MobilePlanner::findNearest(std::list<Eigen::VectorXd>& candidateStates, const Eigen::VectorXd queryState)
 {
-  return 0;
+  // Iterate through the list of candidate states and return the index of the one that has the least
+  // Euclidean distance to the queryState
+  double min_dist = 1000000000000.0;
+  uint32_t min_index = 0;
+  for (int i = 0; i < candidateStates.size(); i++) {
+    double dist = (candidateStates[i] - queryState).norm();
+    if (dist < min_dist) {
+      min_dist = dist;
+      min_index = i;
+    }
+  }
+  return min_index;
 }
 
 Eigen::VectorXd MobilePlanner::steerTowards(const Eigen::VectorXd x1, const Eigen::VectorXd x2, double eps)
 {
-  return NULL;
+  Eigen::VectorXd motion = x2 - x1;
+  double dist = motion.norm();
+  if (dist < eps) {
+    return x2;
+  }
+  return x1 + motion/dist * eps;
 }
 
 void MobilePlanner::generateTrajectory()

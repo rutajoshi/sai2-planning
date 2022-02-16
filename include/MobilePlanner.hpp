@@ -98,7 +98,7 @@ public:
 	 *
 	 * @return integer index of the candidate state that has least steering distance to x
 	 */
-	int findNearest(std::list<Eigen::VectorXd>& candidateStates, const Eigen::VectorXd queryState);
+	uint32_t findNearest(std::list<Eigen::VectorXd>& candidateStates, const Eigen::VectorXd queryState);
 
 	/**
 	 * @brief			Steers from x1 towards x2 along the shortest path (subject to robot
