@@ -1,18 +1,13 @@
 // 2D Path Planner for Mobile Base Robots
 
 #include "../include/MobilePlanner.hpp"
-#include <stdexcept>
-#include <math.h>
 
 namespace Sai2Planning
 {
 
-MobilePlanner::MobilePlanner(const Eigen::VectorXd& initial_position, const Eigen::VectorXd& goal_position, OccupancyGrid& occupancy)
-{
-  _initial_position = initial_position;
-  _goal_position = goal_position;
-  _occupancy = occupancy;
-}
+MobilePlanner::MobilePlanner(Eigen::VectorXd& initial_position, Eigen::VectorXd& goal_position, Eigen::VectorXd& goal_velocity, OccupancyGrid& occupancy)
+  : _initial_position(initial_position), _goal_position(goal_position), _goal_velocity(goal_velocity), _occupancy(&occupancy)
+{}
 
 MobilePlanner::~MobilePlanner()
 {
@@ -59,19 +54,29 @@ bool MobilePlanner::isFreeMotion(const Eigen::VectorXd position_a, const Eigen::
 {
   // Use obstacle representation to identify whether the path from a to b requires going through an obstacle
   // Use occupancy grids for this high level trajectory - only for the later part do you have to worry about moving obstacles
-  float distance = sqrt(pow(position_b[0]-position_a[0], 2) + pow(position_b[1]-position_a[1], 2))
-  uint32_t num_points = (uint32_t) (distance / _occupancy._resolution);
+  float distance = sqrt(pow(position_b[0]-position_a[0], 2) + pow(position_b[1]-position_a[1], 2));
+  uint32_t num_points = (uint32_t) (distance / _occupancy->_resolution);
   float x_step = abs(position_b[0]-position_a[0]) / num_points;
-  float slope = (position_b[1]-position_a[1]) / (position_b[0]-position_a[0])
-  float intercept = position_a[1] - slope*position[0];
+  float slope = (position_b[1]-position_a[1]) / (position_b[0]-position_a[0]);
+  float intercept = position_a[1] - slope*position_a[0];
   for (int i = 0; i < num_points; i++) {
-    float waypoint_x = position_a[0] + x_step
+    float waypoint_x = position_a[0] + x_step;
     float waypoint_y = slope*waypoint_x + intercept;
-    if (!_occupancy.isFree(waypoint_x, waypoint_y)) {
+    if (!_occupancy->isFree(waypoint_x, waypoint_y)) {
       return false;
     }
   }
   return true;
+}
+
+int MobilePlanner::findNearest(std::list<Eigen::VectorXd>& candidateStates, const Eigen::VectorXd queryState)
+{
+  return 0;
+}
+
+Eigen::VectorXd MobilePlanner::steerTowards(const Eigen::VectorXd x1, const Eigen::VectorXd x2, double eps)
+{
+  return NULL;
 }
 
 void MobilePlanner::generateTrajectory()
@@ -79,6 +84,7 @@ void MobilePlanner::generateTrajectory()
   // Implement RRT trajectory generation here
   // Given initial and goal positions, and obstacles, find a path using RRT or RRT*
   // Check for collisions using isFreeMotion
+
 }
 
 bool MobilePlanner::goalReached()

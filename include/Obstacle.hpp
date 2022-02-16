@@ -1,5 +1,8 @@
 // Obstacle
 
+#ifndef SAI2_PLANNING_OBSTACLE_H
+#define SAI2_PLANNING_OBSTACLE_H
+
 #include <iostream>
 
 namespace Sai2Planning
@@ -15,7 +18,7 @@ public:
    * @param[in]  bottomRightX  x position of bottom right corner
    * @param[in]  bottomRightY  y position of bottom right corner
 	 */
-	Obstacle(const double topLeftX, const double topLeftY, const double bottomRightX, const double bottomRightY);
+	Obstacle(double topLeftX, double topLeftY, double bottomRightX, double bottomRightY);
 
   /**
 	 * @brief      destructor
@@ -25,8 +28,12 @@ public:
   /**
    * Member variables
    */
-  double _topLeftX = 0.0;
-  double _topLeftY = 0.0;
-  double _bottomRightX = 0.0;
-  double _bottomRightY = 0.0;
+  double _topLeftX;
+  double _topLeftY;
+  double _bottomRightX;
+  double _bottomRightY;
 };
+
+} /* namespace Sai2Planning */
+
+#endif //SAI2_PLANNING_OBSTACLE_H

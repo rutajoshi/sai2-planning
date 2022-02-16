@@ -1,7 +1,11 @@
 // OccupancyGrid
 
+#ifndef SAI2_PLANNING_OCCGRID_H
+#define SAI2_PLANNING_OCCGRID_H
+
 #include <iostream>
 #include "../include/Obstacle.hpp"
+#include <list>
 
 namespace Sai2Planning
 {
@@ -15,7 +19,7 @@ public:
    * @param[in]  height     Height of occupancy grid (y dimension)
    * @param[in]  obstacles  List of obstacles for this robot to keep track of
 	 */
-	OccupancyGrid(const uint32_t width, const uint32_t height, list<Obstacle>& obstacles, const float resolution);
+	OccupancyGrid(const uint32_t width, const uint32_t height, std::list<Obstacle>& obstacles, const float resolution);
 
   /**
 	 * @brief      destructor
@@ -35,11 +39,13 @@ public:
   /**
    * Member variables
    */
-  uint32_t _width = 0;
-  uint32_t _height = 0;
-  list<Obstacle>* _obstacles = NULL;
-  float _resolution = 0;
+  uint32_t _width;
+  uint32_t _height;
+  std::list<Obstacle>* _obstacles;
+  float _resolution;
 
-}
+};
 
-}
+} /* namespace Sai2Planning */
+
+#endif //SAI2_PLANNING_OCCGRID_H

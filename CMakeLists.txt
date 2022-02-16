@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(sai2-planning VERSION 1.0.0 LANGUAGES CXX)
 
-set(DEFAULT_BUILD_TYPE "Release")
+set(DEFAULT_BUILD_TYPE "Debug")
 
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified.")
@@ -11,6 +11,10 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 include(GNUInstallDirs)
+
+find_package(Eigen3 REQUIRED)
+include_directories(${EIGEN3_INCLUDE_DIR})
+set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR})
 
 set(SOURCE_FILES src/MobilePlanner.cpp src/OccupancyGrid.cpp src/Obstacle.cpp)
 
