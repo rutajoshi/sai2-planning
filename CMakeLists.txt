@@ -16,7 +16,7 @@ find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR})
 
-set(SOURCE_FILES src/MobilePlanner.cpp src/OccupancyGrid.cpp src/Obstacle.cpp)
+set(SOURCE_FILES src/MobilePlanner.cpp src/OccupancyGrid.cpp src/Obstacle.cpp src/temp.cpp)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})  # adding namespace

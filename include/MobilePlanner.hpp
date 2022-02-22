@@ -18,11 +18,14 @@ public:
   /**
 	 * @brief      constructor
 	 *
+	 * @param[in]	 statespace_lo			Vector2d lower bound on state space
+	 * @param[in]	 statespace_hi			Vector2d upper bound on state space
 	 * @param[in]  initial_position   Initial position of the robot in 2d
    * @param[in]  goal_position      Goal position of the robot in 2d
+	 * @param[in]  goal_velocity      Goal velocity of the robot in 2d
    * @param[in]  occupancy          OccupancyGrid for this planner
 	 */
-	MobilePlanner(Eigen::VectorXd& initial_position, Eigen::VectorXd& goal_position, Eigen::VectorXd& goal_velocity, OccupancyGrid& occupancy);
+	MobilePlanner(Eigen::VectorXd& statespace_lo, Eigen::VectorXd& statespace_hi, Eigen::VectorXd& initial_position, Eigen::VectorXd& goal_position, Eigen::VectorXd& goal_velocity, OccupancyGrid& occupancy);
 
   /**
 	 * @brief      destructor
@@ -95,10 +98,11 @@ public:
 	 *
 	 * @param[in]	candidateStates		List of candidate states
 	 * @param[in]	queryState				query state
+	 * @param[in] numStates					The number of states in candidateStates to check
 	 *
 	 * @return integer index of the candidate state that has least steering distance to x
 	 */
-	uint32_t findNearest(std::list<Eigen::VectorXd>& candidateStates, const Eigen::VectorXd queryState);
+	uint32_t findNearest(Eigen::MatrixXd& candidateStates, const Eigen::VectorXd queryState, uint32_t numStates);
 
 	/**
 	 * @brief			Steers from x1 towards x2 along the shortest path (subject to robot
@@ -117,8 +121,14 @@ public:
 	/**
 	 * @brief      Uses RRT to calculate a trajectory
 	 *
+	 * @param[in]	eps 				maximum steering distance
+	 * @param[in] max_iters		maximum number of RRT iterations (early termination
+   *            						is possible when a feasible solution is found)
+	 * @param[in] goal_bias		probability during each iteration of setting
+   *            						x_rand = this._goal_position (instead of uniformly randly sampling
+   *            						from the state space)
 	 */
-	void generateTrajectory();
+	void generateTrajectory(double eps, uint32_t max_iters, double goal_bias);
 
 	/**
 	 * @brief      Function to know if the goal position and velocity is reached
@@ -131,7 +141,9 @@ public:
    * Member variables
    */
   bool _goal_reached = false;
-  Eigen::VectorXd& _initial_position; //Eigen::VectorXd::Zero(3)
+	Eigen::VectorXd& _statespace_lo;
+	Eigen::VectorXd& _statespace_hi;
+  Eigen::VectorXd& _initial_position; //Eigen::VectorXd::Zero(2)
   Eigen::VectorXd& _goal_position;
   Eigen::VectorXd& _goal_velocity;
 
