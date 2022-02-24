@@ -98,7 +98,7 @@ Eigen::VectorXd MobilePlanner::steerTowards(const Eigen::VectorXd x1, const Eige
   return x1 + motion/dist * eps;
 }
 
-void MobilePlanner::generateTrajectory(double eps, uint32_t max_iters, double goal_bias)
+Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters, double goal_bias)
 {
   // Implement RRT trajectory generation here
   // Given initial and goal positions, and obstacles, find a path using RRT or RRT*
@@ -148,9 +148,18 @@ void MobilePlanner::generateTrajectory(double eps, uint32_t max_iters, double go
     }
   }
 
-  // if (success == true) {
-  //
-  // }
+  Eigen::MatrixXd path(n, SPATIAL_DIM);
+  if (success == true) {
+    // Store and return the path
+    uint32_t curr_idx = n - 1;
+    for (uint32_t k = 0; k < n; k++) {
+      path(n - k - 1) = V(curr_idx);
+      curr_idx = P(curr_idx);
+    }
+    return path;
+  }
+
+  return path; // empty if success == false
 
   // for k in range(max_iters):
   //     if random.random() < goal_bias:

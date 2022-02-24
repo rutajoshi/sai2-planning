@@ -127,8 +127,10 @@ public:
 	 * @param[in] goal_bias		probability during each iteration of setting
    *            						x_rand = this._goal_position (instead of uniformly randly sampling
    *            						from the state space)
+	 *
+	 * @return								path to goal
 	 */
-	void generateTrajectory(double eps, uint32_t max_iters, double goal_bias);
+	Eigen::MatrixXd generateTrajectory(double eps, uint32_t max_iters, double goal_bias);
 
 	/**
 	 * @brief      Function to know if the goal position and velocity is reached
