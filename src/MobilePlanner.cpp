@@ -160,33 +160,6 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
   }
 
   return path; // empty if success == false
-
-  // for k in range(max_iters):
-  //     if random.random() < goal_bias:
-  //         x_rand = self.x_goal
-  //     else:
-  //         x_rand = np.random.uniform(self.statespace_lo, self.statespace_hi)
-  //     x_near_idx = self.find_nearest(V[:n], x_rand)
-  //     x_near = V[x_near_idx]
-  //     x_new = self.steer_towards(x_near, x_rand, eps)
-  //     if self.is_free_motion(self.obstacles, x_near, x_new):
-  //         V[n] = x_new
-  //         P[n] = x_near_idx
-  //         n += 1
-  //         if np.allclose(x_new, self.x_goal):
-  //             success = True
-  //             break
-  // if success:
-  //     self.path = []
-  //     curr_idx = n - 1
-  //     while curr_idx != 0:
-  //         self.path.append(V[curr_idx])
-  //         curr_idx = P[curr_idx]
-  //     self.path.append(self.x_init)
-  //     self.path.reverse()
-
-
-
 }
 
 bool MobilePlanner::goalReached()
