@@ -55,7 +55,7 @@ bool MobilePlanner::isFreeMotion(const Eigen::VectorXd position_a, const Eigen::
   // Use obstacle representation to identify whether the path from a to b requires going through an obstacle
   // Use occupancy grids for this high level trajectory - only for the later part do you have to worry about moving obstacles
   float distance = (position_a - position_b).norm();
-  uint32_t num_points = (uint32_t) (distance / _occupancy->_resolution);
+  uint32_t num_points = (uint32_t) (distance / (_occupancy->_resolution / 10.0));
   float x_step = abs(position_b[0]-position_a[0]) / num_points;
   float slope = (position_b[1]-position_a[1]) / (position_b[0]-position_a[0]);
   float intercept = position_a[1] - slope*position_a[0];
@@ -121,12 +121,14 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
   for (uint32_t k = 0; k < max_iters; k++) {
     double r = ((double) rand() / (RAND_MAX));
     if (r < goal_bias) {
+      // With probability goal_bias, set x_rand to goal position
       x_rand = _goal_position;
     } else {
+      // Otherwise, sample randomly from state space
       double rangeSize = 0;
       for (j = 0; j < SPATIAL_DIM; j++) {
         rangeSize = (_statespace_hi(j) - _statespace_lo(j));
-        x_rand(j) = (double) (rand()*rangeSize + _statespace_lo(j)) / rangeSize;
+        x_rand(j) = (double) (((double) rand() / (RAND_MAX)) * rangeSize + _statespace_lo(j));
       }
     }
 
@@ -152,9 +154,15 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
   if (success == true) {
     // Store and return the path
     uint32_t curr_idx = n - 1;
-    for (uint32_t k = 0; k < n; k++) {
-      path(n - k - 1) = V(curr_idx);
+    for (uint32_t k = 0; k < n - 1; k++) {
+      for (uint32_t j = 0; j < SPATIAL_DIM; j++) {
+        path(n - k - 1, j) = V(curr_idx, j);
+      }
+      // path.row(n - k - 1) << V(curr_idx);
       curr_idx = P(curr_idx);
+    }
+    for (uint32_t m = 0; m < SPATIAL_DIM; m++) {
+      path(0, m) = _initial_position(m);
     }
     return path;
   }

@@ -38,3 +38,6 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAM
 
 install(EXPORT Sai2PlanningConfig DESTINATION share/Sai2Planning/cmake NAMESPACE ${PROJECT_NAME}::)
 export(TARGETS ${PROJECT_NAME} FILE Sai2PlanningConfig.cmake NAMESPACE ${PROJECT_NAME}::)
+
+# Unit tests
+add_subdirectory(test)

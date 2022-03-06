@@ -23,7 +23,7 @@ bool OccupancyGrid::isFree(const double x, const double y)
 {
   // For each obstacle, check that the point (x,y) is not contained inside
   for (auto const& obs : *_obstacles) {
-    if (obs._topLeftX < x && obs._bottomRightX > x && obs._topLeftY > y && obs._bottomRightY < y) {
+    if (obs._topLeftX <= x && obs._bottomRightX >= x && obs._topLeftY <= y && obs._bottomRightY >= y) {
       return false;
     }
   }
