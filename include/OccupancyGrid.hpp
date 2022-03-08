@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include "../include/Obstacle.hpp"
+#include <stdexcept>
+#include <math.h>
 #include <list>
 
 namespace Sai2Planning

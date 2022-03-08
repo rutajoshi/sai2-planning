@@ -13,9 +13,9 @@ int main() {
 
   // 1. Make a list of obstacles
   std::list<Obstacle> obstacles;
-  Obstacle obsA = Obstacle(0, 7, 5, 13);
-  Obstacle obsB = Obstacle(3, 2, 7, 5);
-  Obstacle obsC = Obstacle(10, 0, 14, 9);
+  Obstacle obsA = Obstacle(2.5, 10.0, 2.5); //Obstacle(0, 7, 5, 13);
+  Obstacle obsB = Obstacle(5.0, 3.5, 3.0); //Obstacle(3, 2, 7, 5);
+  Obstacle obsC = Obstacle(12.0, 4.5, 4.5); //Obstacle(10, 0, 14, 9);
   obstacles.push_back(obsA);
   obstacles.push_back(obsB);
   obstacles.push_back(obsC);

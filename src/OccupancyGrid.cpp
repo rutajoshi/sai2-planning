@@ -1,7 +1,6 @@
 // OccupancyGrid
 
 #include "../include/OccupancyGrid.hpp"
-#include <stdexcept>
 
 namespace Sai2Planning
 {
@@ -23,7 +22,11 @@ bool OccupancyGrid::isFree(const double x, const double y)
 {
   // For each obstacle, check that the point (x,y) is not contained inside
   for (auto const& obs : *_obstacles) {
-    if (obs._topLeftX <= x && obs._bottomRightX >= x && obs._topLeftY <= y && obs._bottomRightY >= y) {
+    // if (obs._topLeftX <= x && obs._bottomRightX >= x && obs._topLeftY <= y && obs._bottomRightY >= y) {
+    //   return false;
+    // }
+    double distToObs = sqrt(pow(x - obs._centerX, 2) + pow(y - obs._centerY, 2));
+    if (distToObs <= obs._radius) {
       return false;
     }
   }

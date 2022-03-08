@@ -18,7 +18,16 @@ public:
    * @param[in]  bottomRightX  x position of bottom right corner
    * @param[in]  bottomRightY  y position of bottom right corner
 	 */
-	Obstacle(double topLeftX, double topLeftY, double bottomRightX, double bottomRightY);
+	// Obstacle(double topLeftX, double topLeftY, double bottomRightX, double bottomRightY);
+
+	/**
+	 * @brief      constructor
+	 *
+	 * @param[in]  centerX      x position of center
+   * @param[in]  centerY      y position of center
+   * @param[in]  radius  			radius
+	 */
+	Obstacle(double centerX, double centerY, double radius);
 
   /**
 	 * @brief      destructor
@@ -28,10 +37,13 @@ public:
   /**
    * Member variables
    */
-  double _topLeftX;
-  double _topLeftY;
-  double _bottomRightX;
-  double _bottomRightY;
+  // double _topLeftX;
+  // double _topLeftY;
+  // double _bottomRightX;
+  // double _bottomRightY;
+	double _centerX;
+	double _centerY;
+	double _radius;
 };
 
 } /* namespace Sai2Planning */
