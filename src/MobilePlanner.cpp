@@ -209,6 +209,13 @@ Eigen::MatrixXd MobilePlanner::computeSmoothedTrajectory(Eigen::MatrixXd path, f
 
     // 5) Evaluate the equations to get a smooth path
     Eigen::MatrixXd smoothed(timesteps, SPATIAL_DIM);
+    for (int i = 0; i < timesteps; i++) {
+      Eigen::VectorXd row_smooth(SPATIAL_DIM);
+      double t = t_smoothed[i];
+      row_smooth << x_spline(t), y_spline(t);
+      smoothed(i, 0) = row_smooth(0);
+      smoothed(i, 1) = row_smooth(1);
+    }
 
     // 6) return the smoothed path
     return smoothed;
