@@ -5,6 +5,7 @@
 #include <math.h>
 #include <Eigen/Dense>
 #include "../include/OccupancyGrid.hpp"
+#include "../include/spline.h"
 
 #ifndef SAI2_PLANNING_MOBILEPLANNER_H
 #define SAI2_PLANNING_MOBILEPLANNER_H
@@ -131,6 +132,16 @@ public:
 	 * @return								path to goal
 	 */
 	Eigen::MatrixXd generateTrajectory(double eps, uint32_t max_iters, double goal_bias);
+
+	/**
+	 * @brief			Smoothes the trajectory using B-splines
+	 *
+	 * @param[in] path			Eigen::MatrixXd path (N, SPATIAL_DIM)
+	 * @param[in] V_des 		Desired nominal velocity (use as heuristic to assign nominal times to points in initial path)
+	 * @param[in] alpha			Smoothing parameter for interpolation
+	 * @param[in] dt				Timestep for final smoothed path
+	 */
+	 Eigen::MatrixXd computeSmoothedTrajectory(Eigen::MatrixXd path, float V_des, float alpha, float dt);
 
 	/**
 	 * @brief      Function to know if the goal position and velocity is reached

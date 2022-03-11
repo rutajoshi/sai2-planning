@@ -144,6 +144,7 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
       n += 1;
 
       if ((x_new - _goal_position).norm() < 0.05) { // REPLACE WITH CONSTANT
+        _goal_reached = true;
         success = true;
         break;
       }
@@ -168,6 +169,49 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
   }
 
   return path; // empty if success == false
+}
+
+Eigen::MatrixXd MobilePlanner::computeSmoothedTrajectory(Eigen::MatrixXd path, float V_des, float alpha, float dt)
+{
+    const uint32_t SPATIAL_DIM = 2;
+    // Smooth the path returned by generateTrajectory here
+
+    // 1) get the estimated times to reach each point given
+    Eigen::VectorXd times(path.rows());
+    for (int i = 0; i < path.rows(); i++) {
+      if (i == 0) {
+        times(i) = 0.0;
+        continue;
+      }
+      float delta_x = (path.row(i) - path.row(i-1)).norm();
+      float delta_t = delta_x / V_des;
+      times(i) = times(i-1) + delta_t;
+    }
+
+    // 2) get a new set of times, in equal increments of dt
+    int timesteps = (int) (times(path.rows()-1) / dt);
+    std::vector<double> t_smoothed;
+    for (int i = 0; i < timesteps; i++) {
+      t_smoothed.push_back(i*dt);
+    }
+
+    // 3) Get the lists of x and y values from the path
+    std::vector<double> x;
+    std::vector<double> y;
+    for (int i = 0; i < path.rows(); i++) {
+      x.push_back(path.row(i)(0));
+      y.push_back(path.row(i)(1));
+    }
+
+    // 4) Get the equations for each dimension by interpolation
+    tk::spline x_spline(t_smoothed, x);
+    tk::spline y_spline(t_smoothed, y);
+
+    // 5) Evaluate the equations to get a smooth path
+    Eigen::MatrixXd smoothed(timesteps, SPATIAL_DIM);
+
+    // 6) return the smoothed path
+    return smoothed;
 }
 
 bool MobilePlanner::goalReached()
