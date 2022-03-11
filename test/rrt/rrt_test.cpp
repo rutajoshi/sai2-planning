@@ -9,7 +9,6 @@ using namespace std;
 const string path_file = "./planned_path.txt";
 
 int main() {
-  cout << "Tests Completed" << endl;
 
   // 1. Make a list of obstacles
   std::list<Obstacle> obstacles;
@@ -49,4 +48,6 @@ int main() {
   }
 
   // 6. Plot the map and the path in python
+
+  cout << "Tests Completed" << endl;
 }

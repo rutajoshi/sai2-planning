@@ -137,7 +137,7 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
     x_new = steerTowards(x_near, x_rand, eps);
 
     if (isFreeMotion(x_near, x_new)) {
-      std::cout << x_new(0) << "," << x_new(1) << "\n";
+      // std::cout << x_new(0) << "," << x_new(1) << "\n";
       for (j = 0; j < SPATIAL_DIM; j++) {
         V(n, j) = x_new(j);
       }
@@ -152,14 +152,23 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
     }
   }
 
-  Eigen::MatrixXd path(n, SPATIAL_DIM); // TODO(Ruta): the final path is less than length n
+  uint32_t path_size = 0;
+  uint32_t curr = n-1;
+  uint32_t next_curr = P(curr);
+  while (curr != next_curr) {
+    path_size += 1;
+    curr = next_curr;
+    next_curr = P(curr);
+  }
+
+  Eigen::MatrixXd path(path_size, SPATIAL_DIM); // TODO(Ruta): the final path is less than length n
   if (success == true) {
     // Store and return the path
-    std::cout << "n = " << n << "\n";
+    // std::cout << "n = " << n << "\n";
     uint32_t curr_idx = n - 1;
-    for (uint32_t k = 0; k < n - 1; k++) {
+    for (uint32_t k = 0; k < path_size - 1; k++) {
       for (uint32_t j = 0; j < SPATIAL_DIM; j++) {
-        path(n - k - 1, j) = V(curr_idx, j);
+        path(path_size - k - 1, j) = V(curr_idx, j);
       }
       // path.row(n - k - 1) << V(curr_idx);
       curr_idx = P(curr_idx);
@@ -178,10 +187,10 @@ Eigen::MatrixXd MobilePlanner::computeSmoothedTrajectory(Eigen::MatrixXd path, f
     const uint32_t SPATIAL_DIM = 2;
     // Smooth the path returned by generateTrajectory here
 
-    std::cout << "Printing the path before smoothing\n";
-    for (int i = 0; i < path.rows(); i++) {
-      std::cout << path.row(i) << "\n";
-    }
+    // std::cout << "Printing the path before smoothing\n";
+    // for (int i = 0; i < path.rows(); i++) {
+    //   std::cout << path.row(i) << "\n";
+    // }
 
     // 1) get the estimated times to reach each point given
     std::vector<double> times;
