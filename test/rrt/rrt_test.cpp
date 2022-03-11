@@ -38,10 +38,14 @@ int main() {
 
   // 4. Call generateTrajectory
   Eigen::MatrixXd path = planner.generateTrajectory(1, 10000, 0.7);
+  float V_des = 0.4;
+  float alpha = 0.5;
+  float dt = 0.1;
+  Eigen::MatrixXd smoothed = planner.computeSmoothedTrajectory(path, V_des, alpha, dt);
 
   // 5. Go through rows and save positions to a txt file
-  for (int i = 0; i < path.rows(); i++) {
-    std::cout << path.row(i) << "\n";
+  for (int i = 0; i < smoothed.rows(); i++) {
+    std::cout << smoothed.row(i) << "\n";
   }
 
   // 6. Plot the map and the path in python

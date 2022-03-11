@@ -137,6 +137,7 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
     x_new = steerTowards(x_near, x_rand, eps);
 
     if (isFreeMotion(x_near, x_new)) {
+      std::cout << x_new(0) << "," << x_new(1) << "\n";
       for (j = 0; j < SPATIAL_DIM; j++) {
         V(n, j) = x_new(j);
       }
@@ -151,9 +152,10 @@ Eigen::MatrixXd MobilePlanner::generateTrajectory(double eps, uint32_t max_iters
     }
   }
 
-  Eigen::MatrixXd path(n, SPATIAL_DIM);
+  Eigen::MatrixXd path(n, SPATIAL_DIM); // TODO(Ruta): the final path is less than length n
   if (success == true) {
     // Store and return the path
+    std::cout << "n = " << n << "\n";
     uint32_t curr_idx = n - 1;
     for (uint32_t k = 0; k < n - 1; k++) {
       for (uint32_t j = 0; j < SPATIAL_DIM; j++) {
@@ -176,20 +178,27 @@ Eigen::MatrixXd MobilePlanner::computeSmoothedTrajectory(Eigen::MatrixXd path, f
     const uint32_t SPATIAL_DIM = 2;
     // Smooth the path returned by generateTrajectory here
 
+    std::cout << "Printing the path before smoothing\n";
+    for (int i = 0; i < path.rows(); i++) {
+      std::cout << path.row(i) << "\n";
+    }
+
     // 1) get the estimated times to reach each point given
-    Eigen::VectorXd times(path.rows());
+    std::vector<double> times;
     for (int i = 0; i < path.rows(); i++) {
       if (i == 0) {
-        times(i) = 0.0;
+        times.push_back(0.0);
+        // std::cout << 0.0 << "\n";
         continue;
       }
       float delta_x = (path.row(i) - path.row(i-1)).norm();
       float delta_t = delta_x / V_des;
-      times(i) = times(i-1) + delta_t;
+      // std::cout << times[i-1] + delta_t << "\n";
+      times.push_back(times[i-1] + delta_t);
     }
 
     // 2) get a new set of times, in equal increments of dt
-    int timesteps = (int) (times(path.rows()-1) / dt);
+    int timesteps = (int) (times[path.rows()-1] / dt);
     std::vector<double> t_smoothed;
     for (int i = 0; i < timesteps; i++) {
       t_smoothed.push_back(i*dt);
@@ -204,8 +213,8 @@ Eigen::MatrixXd MobilePlanner::computeSmoothedTrajectory(Eigen::MatrixXd path, f
     }
 
     // 4) Get the equations for each dimension by interpolation
-    tk::spline x_spline(t_smoothed, x);
-    tk::spline y_spline(t_smoothed, y);
+    tk::spline x_spline(times, x);
+    tk::spline y_spline(times, y);
 
     // 5) Evaluate the equations to get a smooth path
     Eigen::MatrixXd smoothed(timesteps, SPATIAL_DIM);
