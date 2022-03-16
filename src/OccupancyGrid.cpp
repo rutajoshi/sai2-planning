@@ -5,12 +5,13 @@
 namespace Sai2Planning
 {
 
-OccupancyGrid::OccupancyGrid(const uint32_t width, const uint32_t height, std::list<Obstacle>& obstacles, const float resolution)
+OccupancyGrid::OccupancyGrid(const uint32_t width, const uint32_t height, std::list<Obstacle>& obstacles, const float resolution, const float clearance)
 {
   _width = width;
   _height = height;
   _obstacles = &obstacles;
   _resolution = resolution;
+  _clearance = clearance;
 }
 
 OccupancyGrid::~OccupancyGrid()
@@ -26,7 +27,7 @@ bool OccupancyGrid::isFree(const double x, const double y)
     //   return false;
     // }
     double distToObs = sqrt(pow(x - obs._centerX, 2) + pow(y - obs._centerY, 2));
-    if (distToObs <= obs._radius) {
+    if (distToObs <= obs._radius + _clearance) {
       return false;
     }
   }

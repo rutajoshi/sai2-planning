@@ -20,8 +20,10 @@ public:
 	 * @param[in]  width      Width of occupancy grid (x dimension)
    * @param[in]  height     Height of occupancy grid (y dimension)
    * @param[in]  obstacles  List of obstacles for this robot to keep track of
+	 * @param[in]  resolution The resolution of the occupancy grid
+	 * @param[in]	 clearance	The clearance afforded to obstacles
 	 */
-	OccupancyGrid(const uint32_t width, const uint32_t height, std::list<Obstacle>& obstacles, const float resolution);
+	OccupancyGrid(const uint32_t width, const uint32_t height, std::list<Obstacle>& obstacles, const float resolution, const float clearance);
 
   /**
 	 * @brief      destructor
@@ -45,6 +47,7 @@ public:
   uint32_t _height;
   std::list<Obstacle>* _obstacles;
   float _resolution;
+	float _clearance;
 
 };
 

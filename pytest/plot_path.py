@@ -54,7 +54,7 @@ def plot_everything(grid, obstacles, path):
     print("Added path")
 
     # Show and save (invert axes to be at top left)
-    plt.gca().invert_yaxis()
+    # plt.gca().invert_yaxis()
     plt.savefig("vis.png")
     plt.show()
     print("Saved figure")
